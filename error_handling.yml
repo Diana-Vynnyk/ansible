@@ -1,0 +1,25 @@
+---
+- name: Errors
+  hosts: all
+#  any_errors_fatal: true
+  become: yes
+
+  tasks:
+  - name: Task 1
+    apt: name=apoche state=latest
+    ignore_errors: yes
+
+  - name: Task 2
+    shell: echo example error
+    register: results
+    failed_when: results.rc == 0
+#    failed_when: "'error' in results.stdout"
+ 
+  - name: Print output
+    debug:
+      var: results
+
+
+  - name: Task 3
+    shell: echo example-message2
+

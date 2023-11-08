@@ -1,0 +1,30 @@
+---
+- name: Loops Playbook
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: message to all servers (loop) - new version of ansible
+    debug: msg="print item {{ item }}"
+    loop:
+      - apple
+      - pear
+      - peach
+
+  - name: message to all servers (with_items) - old version of ansible
+    debug: msg="print item {{ item }}"
+    with_items:
+      - apple
+      - pear
+      - peach
+
+  - name: Loop Until
+    shell: echo -n Z >> myfile.txt && cat myfile.txt
+    register: output
+    delay: 2
+    retries: 10
+    until: output.stdout.find("ZZZZ") == false
+
+  - name: print final output
+    debug:
+      var: output.stdout 

@@ -1,0 +1,33 @@
+---
+ - name: Playbook to install NGINX
+   hosts: all 
+   become: true
+
+   vars:
+     source_file: ./MyWebSite/index.html
+     destin_file: /var/www/html
+
+   tasks: 
+
+    - name: Copy index.html to servers
+      copy: 
+        src: "{{ source_file }}" 
+        dest: "{{ destin_file }}" 
+        mode: 0555
+      notify: Restart Nginx
+
+    - name: Ansible apt install nginx
+      apt:
+        name: nginx
+        state: latest
+
+    - name: 
+      service:
+        name: nginx
+        state: started
+
+   handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
